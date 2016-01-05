@@ -25,15 +25,7 @@ namespace CB.Windows.UI
         #region Methods
         public void Show()
         {
-            var toastXml = CreateToastContent();
-            var toast = new ToastNotification(toastXml);
-            if (ExpirationTime.HasValue)
-            {
-                toast.ExpirationTime = ExpirationTime;
-            }
-            toast.Activated += OnActivated;
-            toast.Dismissed += OnDismissed;
-            toast.Failed += OnFailed;
+            var toast = CreateToast();
             var toastNotifier = ToastNotificationManager.CreateToastNotifier("Toast");
             toastNotifier.Show(toast);
         }
@@ -59,6 +51,20 @@ namespace CB.Windows.UI
 
 
         #region Implementation
+        private ToastNotification CreateToast()
+        {
+            var toastXml = CreateToastContent();
+            var toast = new ToastNotification(toastXml);
+            if (ExpirationTime.HasValue)
+            {
+                toast.ExpirationTime = ExpirationTime;
+            }
+            toast.Activated += OnActivated;
+            toast.Dismissed += OnDismissed;
+            toast.Failed += OnFailed;
+            return toast;
+        }
+
         private XmlDocument CreateToastContent()
         {
             var toastXml = ToastNotificationManager.GetTemplateContent(GetToastTemplateType());
